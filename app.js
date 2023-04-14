@@ -7,6 +7,9 @@ const app = express();
 const connectDB = require('./db/connect');
 const MONGO = process.env.MONGO_URI;
 
+const port = process.env.PORT || 3000;
+
+
 // routers
 const authRouter = require('./routes/auth');
 const jobsRouter = require('./routes/jobs');
@@ -26,7 +29,6 @@ app.use('/api/v1/jobs', jobsRouter);
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
-const port = process.env.PORT || 3000;
 
 const start = async () => {
   try {
