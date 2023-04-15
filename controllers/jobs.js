@@ -1,3 +1,7 @@
+const { StatusCodes } = require('http-status-codes');
+const Job = require("../models/Job");
+const { BadRequestError, NotFoundError } = require('../errors')
+
 const getAllJobs = (req, res) => {
   res.send('get all Jobs ')
 }
@@ -15,7 +19,7 @@ const deleteJob = (req, res) => {
 }
 
 const createJob = (req, res) => {
-  res.send('Create Jobs ')
+  res.json(req.body);
 }
 
 module.exports = {
