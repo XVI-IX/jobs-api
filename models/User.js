@@ -3,6 +3,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { UnauthenticatedError } = require('../errors');
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -42,8 +43,13 @@ UserSchema.methods.createJWT = function () {
 }
 
 UserSchema.methods.comparePassword = async function (reqPassword) {
-  const match = await bcrypt.compare(reqPassword, this.password);
-  return match;
+  try {
+    const match = await bcrypt.compare(reqPassword, this.password);
+    return match;
+  } catch (error) {
+    throw new UnauthenticatedError("Please provide password");
+  }
 }
+
 
 module.exports = mongoose.model('user', UserSchema);

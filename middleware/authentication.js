@@ -7,7 +7,6 @@ require('dotenv').config();
 const auth = async (req, res, next) => {
   // check header
   const authHeader = req.headers.authorization;
-  console.log(`from auth middleware ${authHeader}`);
 
   if (!authHeader || !authHeader.startsWith('Bearer')) {
     throw new UnauthenticatedError('Invalid Credentials');
@@ -19,8 +18,9 @@ const auth = async (req, res, next) => {
     const payload = jwt.verify(token, process.env.SECRET);
 
     // attach user
-    const user = await User.findById(payload.id).select('-password');
+    const user = await User.findById(payload.userId).select('-password');
     req.user = user;
+
 
     next();
   } catch (error) {
