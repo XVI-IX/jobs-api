@@ -31,11 +31,31 @@ const getJob = async (req, res) => {
     throw new NotFoundError(`No job with id ${jobId}`)
   }
 
-  res.status(StatusCodes.OK).json({ job })
+  res.status(StatusCodes.OK).json({ job });
 }
 
 const updateJob = async (req, res) => {
-  
+  const jobId = req.params.id;
+  const userId = req.user._id;
+  const { company, position } = req.body;
+
+  if (company === '' || position === '') {
+    throw new BadRequestError('Company or Position fields cannot be empty');
+  }
+
+  const job = await Job.findOneAndUpdate({
+    _id: jobId,
+    createdBy: userId
+  }, req.body, {
+    new: true,
+    runValidators: true
+  });
+
+  if (!job) {
+    throw new NotFoundError(`No job with id ${jobId}`)
+  }
+
+  res.status(StatusCodes.OK).json({ job });
 }
 
 const deleteJob = (req, res) => {
