@@ -1,6 +1,21 @@
+require('dotenv').config();
+const { BadRequestError } = require('../errors');
+const User = require('../models/User');
+const { StatusCodes } = require('http-status-codes');
+const jwt = require('jsonwebtoken');
+
 
 const register = async (req, res) => {
-  res.send('register user')
+
+  const user = await User.create({ ...req.body });
+  const token = user.createJWT();
+
+  res.status(StatusCodes.CREATED).json({ 
+    user: {
+      name: user.name
+    },
+    token });
+  
 }
 
 const login = async (req, res) => {
