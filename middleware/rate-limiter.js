@@ -5,12 +5,12 @@ const redis = new Redis();
 
 const limiter = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-  await redis.exists(authHeader)
+  redis.exists(authHeader)
         .then(
           async (result) => {
           if (result === 1) {
             console.log(result);
-            await redis.get(authHeader)
+            redis.get(authHeader)
                   .then(
                     (result) => {
                       let data = JSON.parse(result);
