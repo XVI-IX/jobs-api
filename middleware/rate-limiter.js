@@ -24,10 +24,12 @@ const limiter = async (req, res, next) => {
         next();
       }
       if (timeDiff < 1) {
+        if (data.count > 3) {
         res.status(StatusCodes.SERVICE_UNAVAILABLE).json({
           error: -1,
           msg: 'API access limit exceeded'
         });
+      }
 
         data.count++;
         await redis.set(authHeader, JSON.stringify(data));
